@@ -41,16 +41,24 @@ class Model:
             if user_char.lower() in self.new_word.lower():
                 self.change_user_input(user_char)
             else:
-                self.counter += 1
-                self.all_user_chars.append(user_char.upper())
+                if user_char.upper() in self.all_user_chars:  # kontrolli kas täht on juba listis
+                    self.counter += 1
+                else:
+                    self.counter += 1
+                    self.all_user_chars.append(user_char.upper())
 
-    def change_user_input(self,user_char):
+    def change_user_input(self, user_char):
         current_word = self.chars_to_list(self.new_word)
         x = 0
-        for c in current_word:
-            if user_char.lower() == c.lower():
-                self.user_word[x] = user_char.upper()
-            x += 1
+        # kontrolli kas kasutaja sisestatud täht on juba user_word listis. user_word list algselt ["_","_","_"]
+        # kui leitud siis user_word list ["A","_","_"], kui ei ole siis lisa täht ja kui on siis lisa +1 vale täht
+        if user_char.upper() not in self.user_word:
+            for c in current_word:
+                if user_char.lower() == c.lower():
+                    self.user_word[x] = user_char.upper()
+                x += 1
+        else:
+            self.counter += 1
 
 
     def chars_to_list(self, string):
